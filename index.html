@@ -3,14 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Météo</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <h1>Météo du jour</h1>
+    <div id="displayWeather"></div>
+    <br>
     <input type="search" name="searchTown" id="searchTown" placeholder="Veuillez saisir la ville...">
+    <select name="listFav" id="listFav">
+        <option value="">Favoris</option>
+    </select>
     <button id="displayButton">Afficher la météo</button>
     <button id="fav">Ajouter aux favoris</button>
-    <div id="displayWeather"></div>
-    <ul id="listFav"></ul>
     <script src="script.js"></script>
 </body>
 </html>

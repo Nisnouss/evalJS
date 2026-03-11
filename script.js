@@ -6,7 +6,7 @@ class Weather{
     }
 
     displayWeather(){
-        return `Ville: ${this.ville}
+        return `${this.ville}
         Température: ${this.temperature} °C
         Temps: ${this.description}.`
     }
@@ -73,12 +73,19 @@ displayButton.addEventListener('click' ,async(e) =>{
             e.preventDefault()
             const stockedTown = localStorage.getItem(ville)
             if(stockedTown === null){
-                window.localStorage.setItem(ville, ville)
-                const newList = listFav.insertAdjacentHTML('beforebegin', `<li>${ville}</li>`)
-                displayWeatherArea.innerHTML = "La ville a été ajouté aux favoris" + newList
+                localStorage.setItem(ville, ville)
+                displayWeatherArea.innerHTML = "La ville a été ajouté aux favoris"
             }else{
                 displayWeatherArea.innerHTML = "La ville est déjà dans les favoris"
             }
+            window.addEventListener("load", ()=>{
+                for(let i = 0; i < stockedTown.length; i++){
+                    const newList = listFav.insertAdjacentHTML('beforeend', `<option>${ville}</option>`)
+                }
+            })
+            listFav.addEventListener("select", ()=>{
+                searchTownValue = newList
+            })
         })
 
         const url_2 = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${long}&current_weather=true`;
