@@ -6,25 +6,46 @@ class Weather{
     }
 
     displayWeather(){
-        return `A ${this.ville} la température est de ${this.temperature} °C, et il fait ${this.description}.`
+        return `Ville: ${this.ville}
+        Température: ${this.temperature} °C
+        Temps: ${this.description}.`
     }
 }
 
 const weatherArray = {
-	"0":"Ensolleillé",
+	"0":"Ensoleillé",
 	"2":"Partiellement couvert",
 	"3":"Nuageux",
 	"45":"Brumeux",
 	"48":"Légère brume",
+    "51": "Légère bruine",
+    "53": "Bruine",
+    "55": "Bruine Epaisse",
+    "56": "Léger vent frais",
+    "57": "Vent frais",
 	"61":"Pluie lègère",
 	"63":"Pluie",
+    "65": "Forte pluie",
+    "66": "Légère pluie froide",
+    "67": "Pluie froide",
+    "71": "Neige légère",
 	"73":"Neige",
+    "75": "Forte neige",
+    "77": "Grêle",
+    "80": "Légères averses",
+    "81": "Averses",
+    "82": "Fortes averses",
+    "85": "Lègères neige avec averses",
+    "86": "Averses et neige",
 	"95":"Orages",
+    "96": "Légers orages avec grêles",
+    "99": "Orages avec grêle",
+
 }
 
-const formWeather = document.getElementById('formWeather')
+const displayButton = document.getElementById('displayButton')
 
-formWeather.addEventListener('submit' ,async(e) =>{
+displayButton.addEventListener('click' ,async(e) =>{
     e.preventDefault()
     const searchTown = document.getElementById ('searchTown')
     const searchTownValue = searchTown.value
@@ -44,6 +65,21 @@ formWeather.addEventListener('submit' ,async(e) =>{
         const lat = datas.results[0].latitude
         const long = datas.results[0].longitude
 
+        const buttonFav = document.getElementById('fav')
+        const listFav = document.getElementById('listFav')
+
+        buttonFav.addEventListener("click", (e) => {
+            const ville = datas.results[0].name
+            e.preventDefault()
+            const stockedTown = localStorage.getItem(ville)
+            if(stockedTown === null){
+                window.localStorage.setItem(ville, ville)
+                const newList = listFav.insertAdjacentHTML('beforebegin', `<li>${ville}</li>`)
+                displayWeatherArea.innerHTML = "La ville a été ajouté aux favoris" + newList
+            }else{
+                displayWeatherArea.innerHTML = "La ville est déjà dans les favoris"
+            }
+        })
 
         const url_2 = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${long}&current_weather=true`;
         
