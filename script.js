@@ -45,13 +45,43 @@ const weatherArray = {
 
 }
 
-// Fonction affichant de manière permanente la liste de villes en favoris stockées dans le localStorage
+// Mise en place du localStorage pour stocker la ville voulue en favoris
+const searchTown = document.getElementById ('searchTown')
+const searchTownValue = searchTown.value
+const displayWeatherArea = document.getElementById('displayWeather')
 const listFav = document.getElementById('listFav')
+const buttonFav = document.getElementById('fav')
+
+// Fonction affichant de manière permanente la liste de villes en favoris stockées dans le localStorage
+buttonFav.addEventListener("click", () => {
+    const ville = searchTown.value
+
+    if(ville === ""){
+        return displayWeatherArea.innerText = "Le champ est vide"
+    }
+
+    if(localStorage.getItem(ville) == null){
+        localStorage.setItem(ville, ville)
+        listFav.insertAdjacentHTML("beforeend", `<option>${ville}</option>`)
+        displayWeatherArea.innerText = "La ville a été ajoutée aux favoris avec succès"
+    } else {
+        displayWeatherArea.innerText = "La ville est déjà dans les favoris"
+    }
+})
+
+// Permettre aux données du localStorage de rester dans le select même en rafraîchissant la page
 window.addEventListener("load", ()=>{
     const villes = Object.keys(localStorage)
     villes.forEach(ville =>{
         const newList = listFav.insertAdjacentHTML('beforeend', `<option value="${ville}">${ville}</option>`)
     })
+})
+
+// Afficher la valeur de l'option sur l'input
+listFav.addEventListener("change", () => {
+    const selectTown = listFav.value
+    const searchTown = document.getElementById("searchTown")
+    searchTown.value = selectTown
 })
 
 // Mise en place d'une fonction asynchrone pour récupérer les données météos des liens API
@@ -61,6 +91,7 @@ displayButton.addEventListener('click' ,async(e) =>{
     e.preventDefault()
 
     // La partie ci-dessous permet d'inclure le nom de la ville saisi au niveau de l'input par l'utilisateur, et l'inclure au lien
+
     const searchTown = document.getElementById ('searchTown')
     const searchTownValue = searchTown.value
     const displayWeatherArea = document.getElementById('displayWeather')
@@ -74,31 +105,16 @@ displayButton.addEventListener('click' ,async(e) =>{
         const datas = await req.json()
 
         // Condition si la ville n'existe pas dans la page
-        if(searchTownValue != datas.results[0].name){
-            displayWeatherArea.innerText = "La ville saisie n'existe pas"
-        }else if(searchTownValue === " "){
-            displayWeatherArea.innerText = "Veuillez remplir le champs requis"
+        if(datas.results == null){
+            return displayWeatherArea.innerText = "La ville saisie n'existe pas"
+        }else if(searchTown.value === ""){
+            return displayWeatherArea.innerText = "Le champ est vide"
         }
 
         // Récupérer les données du tableau "results" à l'indice 0
         const lat = datas.results[0].latitude
         const long = datas.results[0].longitude
 
-        // Mise en place du localStorage pour stocker la ville voulue en favoris
-        const buttonFav = document.getElementById('fav')
-        buttonFav.addEventListener("click", (e) => {
-            e.preventDefault()
-            const ville = datas.results[0].name
-            const stockedTown = localStorage.getItem(ville)
-            // Stocker la ville si elle n'est pas déjà dans le localStorage
-            if(stockedTown === null){
-                localStorage.setItem(ville, ville)
-                displayWeatherArea.innerHTML = "La ville a été ajouté aux favoris"
-                insertAdjacentHTML('beforeend', `<option>${ville}</option>`)
-            }else{
-                displayWeatherArea.innerHTML = "La ville est déjà dans les favoris"
-            }
-        })
 
         // Utiliser les données de latitude et longitude et inclure les variables associées au second url permettant de récupérer la météo d'une ville spécifique
         const url_2 = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${long}&current_weather=true`;
@@ -121,4 +137,3 @@ displayButton.addEventListener('click' ,async(e) =>{
         console.log("Une erreur s'est produite ", e)
     }
 })
-
