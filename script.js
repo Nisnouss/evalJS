@@ -45,21 +45,20 @@ const weatherArray = {
 
 }
 
-// Mise en place du localStorage pour stocker la ville voulue en favoris
 const searchTown = document.getElementById ('searchTown')
 const searchTownValue = searchTown.value
 const displayWeatherArea = document.getElementById('displayWeather')
 const listFav = document.getElementById('listFav')
 const buttonFav = document.getElementById('fav')
 
-// Fonction affichant de manière permanente la liste de villes en favoris stockées dans le localStorage
+// Mise en place du localStorage pour stocker la ville voulue en favoris
 buttonFav.addEventListener("click", () => {
     const ville = searchTown.value
-
+    
     if(ville === ""){
         return displayWeatherArea.innerText = "Le champ est vide"
     }
-
+    
     if(localStorage.getItem(ville) == null){
         localStorage.setItem(ville, ville)
         listFav.insertAdjacentHTML("beforeend", `<option>${ville}</option>`)
@@ -69,7 +68,7 @@ buttonFav.addEventListener("click", () => {
     }
 })
 
-// Permettre aux données du localStorage de rester dans le select même en rafraîchissant la page
+// Fonction affichant de manière permanente la liste de villes en favoris stockées dans le localStorage
 window.addEventListener("load", ()=>{
     const villes = Object.keys(localStorage)
     villes.forEach(ville =>{
