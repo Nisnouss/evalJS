@@ -50,21 +50,15 @@ const listFav = document.getElementById('listFav')
 window.addEventListener("load", ()=>{
     const villes = Object.keys(localStorage)
     villes.forEach(ville =>{
-        const newList = listFav.insertAdjacentHTML('beforeend', `<option>${ville}</option>`)
+        const newList = listFav.insertAdjacentHTML('beforeend', `<option value="${ville}">${ville}</option>`)
     })
 })
 
-// Mise en place d'un API pour récupérer les données météos de liens API
+// Mise en place d'une fonction asynchrone pour récupérer les données météos des liens API
 const displayButton = document.getElementById('displayButton')
 
 displayButton.addEventListener('click' ,async(e) =>{
     e.preventDefault()
-
-    // listFav.addEventListener("change", (e) =>{
-    //     const getFav = e.target.value
-
-    //     searchTown = getFav
-    // })
 
     // La partie ci-dessous permet d'inclure le nom de la ville saisi au niveau de l'input par l'utilisateur, et l'inclure au lien
     const searchTown = document.getElementById ('searchTown')
@@ -82,6 +76,8 @@ displayButton.addEventListener('click' ,async(e) =>{
         // Condition si la ville n'existe pas dans la page
         if(searchTownValue != datas.results[0].name){
             displayWeatherArea.innerText = "La ville saisie n'existe pas"
+        }else if(searchTownValue === " "){
+            displayWeatherArea.innerText = "Veuillez remplir le champs requis"
         }
 
         // Récupérer les données du tableau "results" à l'indice 0
